@@ -1,0 +1,12 @@
+gRPC installieren:
+pip3 install grpcio grpcio-tools
+gRPC-Dateien aus der Proto-Datei generieren:
+python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. firefly.proto
+Installation von tkinter, falls im System noch nicht vorhanden
+sudo apt-get install python3-tk
+Einzelen Server und Client starten
+python3 firefly_server.py
+python3 firefly_client.py
+Server mit Anzahl der erwarteten Clients und mehrere Clients gleichzeitig starten:
+python3 start_server.py
+python3 start_clients.py
