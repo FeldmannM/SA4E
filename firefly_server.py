@@ -16,13 +16,17 @@ class Firefly:
         self.y = y
         self.size = size
         self.phase = -1
+        self.last_update = time.time()
         self.rect = canvas.create_rectangle(x, y, x + size, y + size, fill='black', outline='')
 
     def set_phase(self, phase):
         self.phase = phase
+        self.last_update = time.time()
 
     # GUI Update
     def update(self):
+        if time.time() - self.last_update > 3:
+            self.phase = -1
         if self.phase < 0:
             self.canvas.itemconfig(self.rect, fill='black')
         elif self.phase > math.pi:
@@ -90,8 +94,14 @@ class FireflyServiceServicer(firefly_pb2_grpc.FireflyServiceServicer):
             position = next(self.positions)
             return firefly_pb2.PositionResponse(x=position[0], y=position[1])
         except StopIteration:
+            # Test ob eine Position wieder frei ist
+            for (x, y), firefly in self.fireflies.items():
+                if firefly.phase == -1:
+                    return firefly_pb2.PositionResponse(x=x, y=y)
+
+            # Keine Position frei
             context.set_code(grpc.StatusCode.OUT_OF_RANGE)
-            context.set.details('No more positions available')
+            context.set_details('No more positions available')
             return firefly_pb2.PositionResponse()
 
     # aktuelle Phase senden
@@ -102,7 +112,7 @@ class FireflyServiceServicer(firefly_pb2_grpc.FireflyServiceServicer):
             n = len({k[0] for k in self.fireflies.keys()})  # Anzahl der Reihen
             m = len({k[1] for k in self.fireflies.keys()})  # Anzahl der Spalten
             neighbors = get_toroidal_neighbors(request.x, request.y, n, m, self.fireflies)
-            ''' #Debug-Ausgabe der Nachbarn und ihrer Phasen
+            '''#Debug-Ausgabe der Nachbarn und ihrer Phasen
             print(f"Client ({request.x}, {request.y}) hat Nachbarn:")
             for nx, ny in neighbors:
                 phase = self.fireflies[(nx, ny)].phase
