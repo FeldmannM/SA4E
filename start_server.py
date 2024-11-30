@@ -22,7 +22,7 @@ if __name__ == '__main__':
 
     # Anzahl der erwarteten Clients
     num_clients = 12
-    # Berechnete Werte für n und m verwenden (True/False)
+    # Berechnete Werte fuer n und m verwenden (True/False)
     use_calculated = True
 
     start_server(num_clients, use_calculated)
