@@ -134,7 +134,7 @@ def serve(fireflies):
     return server
 
 def main():
-    # Feste Werte verwenden, ausser sie werden vom Startskript überschrieben
+    # Feste Werte verwenden, ausser sie werden vom Startskript ueberschrieben
     n = 5
     m = 5
     if len(sys.argv) == 3:
