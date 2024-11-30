@@ -75,7 +75,7 @@ class FireflyClient:
             delta_t = 0.05
             interaction = sum(math.sin(neighbor_phase - self.phase) for neighbor_phase in neighbor_phases)
             self.phase += delta_t + (K / len(neighbor_phases)) * interaction * delta_t
-            # Phase im Bereich [0, 2π] halten
+            # Phase im Bereich [0, 2Pi] halten
             self.phase %= 2 * math.pi
 
     def stop(self):
